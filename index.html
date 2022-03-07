@@ -6,7 +6,7 @@
     <!--Tab Icon Link-->
     <link rel="icon" href="images/icon.png">
     <!--Css Link-->
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="css/index.css">
     <!--Bootstrap Css Link-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
     <!--Js Link-->
@@ -18,9 +18,7 @@
         <!--navbar start-->
         <div class="showcase-top">
             <img src="images/logo.png" alt="logo" id="logo">
-            <a href="login.html">
-                <button type="submit" class="submit">SIGN IN</button>
-            </a>
+            <button type="submit" class="submit">SIGN IN</button>
             <select>
                 <option value="/in/">English</option>
                 <option value="/in-hi/">हिन्दी</option>
@@ -221,6 +219,46 @@
         </div>
     </footer>
     <!--foot section end-->
+
+
+    <script src="js/index.js"></script>
+    <script>
+        window.onload = geolocation()
+           var x = document.getElementById("out")
+           var y = document.getElementById("address")
+           var z =  document.getElementById('icon')
+           function geolocation(){
+               if(navigator.geolocation){
+                   navigator.geolocation.getCurrentPosition(showPosition)
+               }
+               else{
+                   x.innerText="Geo Not Supported"
+               }
+           }
+
+           function showPosition(data){
+               console.log(data)
+               // x.innerText=`Latitude is ${data.coords.latitude}, longitude is ${data.coords.longitude}`
+               let lat = data.coords.latitude;
+               let long = data.coords.longitude;
+               var url = `https://api.openweathermap.org/data/2.5/forecast/daily?lat=${lat}&lon=${long}&mode=json&units=metric&cnt=2&appid=fbf712a5a83d7305c3cda4ca8fe7ef29`
+               /*var url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${data.coords.latitude},${data.coords.longitude}&key=`;
+               */  
+               fetch(url)
+               .then((res) => res.json())
+               .then((data) => {
+                   console.log(data)                 
+                   data.list.map((item) => {
+                       console.log(item.temp.day)
+                       y.innerText=`${item.temp.day}°C | ${item.weather[0].description}`
+                       z.innerHTML=`<img class='card-img-top' src='https://openweathermap.org/img/w/${item.weather[0].icon}.png' alt='weather'/>`
+                   })
+                   
+               })
+           }
+
+           window.onload=test()
+        
+   </script>
 </body>
-<script src="./index.js"></script>
 </html>
